@@ -1,13 +1,25 @@
 "use client"
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { Validate } from "@/utils/Validate";
 
 const Login = () => {
   const [isSignIN, SetisSignIN] = useState(true);
+  const [ErrorMessage,SetErrorMessage]= useState("");
 
+  const Email = useRef(null);
+  const Password = useRef(null);
 
   const CheckSignIN = ()=>{
     SetisSignIN(!isSignIN);
+  }
+
+  const SubmitInput= ()=>{
+    const ValidateResult = Validate(Email.current.value, Password.current.value);
+    // console.log(Email.current.value)
+    // console.log(Password.current.value);
+    // console.log(ValidateResult);
+    SetErrorMessage(ValidateResult);
   }
 
   return (
@@ -20,6 +32,7 @@ const Login = () => {
         />
       </div>
       <form
+        onSubmit={(e)=>e.preventDefault()}
         action=""
         className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-md bg-opacity-80 "
       >
@@ -34,6 +47,7 @@ const Login = () => {
         />
         )}
         <input
+          ref={Email}
           type="text"
           name=""
           id=""
@@ -41,13 +55,15 @@ const Login = () => {
           className="p-4 my-2 w-full bg-gray-700 rounded-sm border "
         />
         <input
+          ref={Password}
           type="password"
           name=""
           id=""
           placeholder="Password"
           className="p-4 my-2 w-full bg-gray-700 rounded-sm border"
         />
-        <button className="p-2 my-4 text-white w-full bg-red-700 rounded-md">{isSignIN ? "Sign In" : "Sign Up"}</button>
+        <p className="text-red-600">{ErrorMessage}</p>
+        <button className="p-2 my-4 text-white w-full bg-red-700 rounded-md" onClick={SubmitInput}>{isSignIN ? "Sign In" : "Sign Up"}</button>
         <h1 onClick={CheckSignIN} className="cursor-pointer">{isSignIN ? "New to Netflix ? Sign Up Now": "Already Registerd ? Sign In Now"}</h1>
       </form>
     </div>
